@@ -20,6 +20,8 @@ black = '*'
 white = 'o'
 pieces = [black, white]
 
+cur_turn = 0
+
 
 def show_blank_cb():
 
@@ -63,6 +65,21 @@ def print_cb():
     print '7│%c│%c│%c│%c│%c│%c│%c│%c│' % (cb[7][0], cb[7][1], cb[7][2], cb[7][3], cb[7][4], cb[7][5], cb[7][6], cb[7][7])
     print ' └─┴─┴─┴─┴─┴─┴─┴─┘'
 
+    print ''
+    print 'turn: %s' % (pieces[cur_turn])
+
+
+def set_pieces(x, y, p):
+
+    global cur_turn
+
+    if x >= 0 and x <= 7 and y >= 0 and y <= 7:
+        cb[x][y] = p
+        cur_turn ^= 1
+        print_cb()
+        return True
+    else:
+        return False
 
 def run():
     
@@ -76,9 +93,19 @@ def run():
         elif cmd == 'p':
             print_cb()
 
+        elif len(cmd) >= 5 and cmd[0] == 's':
+            x = int(cmd.split(' ')[1])
+            y = int(cmd.split(' ')[2])
+            print 'set x:%d, y:%d' % (x, y)
+            
+            if set_pieces(x, y, pieces[cur_turn]) == False:
+                print 'wrong place'
+
         else:
             print 'usage:'
             print '   p - print checkerboard. '
+            print '   s - put pieces on checker board. '
+            print '       s <x> <y>'
             print '   q - quit. '
 
 
