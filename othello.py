@@ -19,6 +19,7 @@ blank = ' '
 black = '*'
 white = 'o'
 pieces = [black, white]
+picecs_counter = [0, 0]
 
 cur_turn = 0
 
@@ -67,6 +68,7 @@ def print_cb():
 
     print ''
     print 'turn: %s' % (pieces[cur_turn])
+    print '%s: %d, %s: %d' % (pieces[0], pieces_counter[0], pieces[1], pieces_counter[1])
 
 def reset():
     for x in range(8):
@@ -79,9 +81,24 @@ def reset():
     cb[4][4] = black
 
     global cur_turn
-    cur_turn = 0
+    global pieces_counter
+
+    cur_turn  = 0
+    pieces_counter = [2, 2]
 
     print_cb()
+
+def turn_counter():
+
+    global pieces_counter
+    pieces_counter[cur_turn] += 1
+    pieces_counter[cur_turn ^ 1] -= 1
+
+
+def inc_counter():
+    global pieces_counter
+    pieces_counter[cur_turn] += 1
+
 
 def check(b, x, y, p, mx, my):
     t = False
@@ -105,8 +122,6 @@ def check(b, x, y, p, mx, my):
     return False
 
 def turn(x, y, p, mx, my):
-    
-    cb[x][y] = p
 
     while True:
         x = x + mx
@@ -119,7 +134,8 @@ def turn(x, y, p, mx, my):
             break 
         else:
             cb[x][y] = p
- 
+            turn_counter()
+
 
 def turn_pieces(x, y, p):
 
@@ -151,6 +167,10 @@ def turn_pieces(x, y, p):
     if check(cb, x, y, p, 1, 1):   #right down
         turn(x, y, p, 1, 1)
         turned = True
+
+    if turned:
+        cb[x][y] = p
+        inc_counter()
 
     return turned    
 
