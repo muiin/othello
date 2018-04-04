@@ -83,12 +83,82 @@ def reset():
 
     print_cb()
 
+def check(b, x, y, p, mx, my):
+    t = False
+
+    while True:
+        x = x + mx
+        y = y + my
+        if x < 0 or x >= 8 or y < 0 or y >= 8:
+            break
+
+        if t == False:
+            if b[x][y] == p or b[x][y] == ' ':
+                return False
+            else:
+                t = True
+        else:
+            if b[x][y] == p:
+                return True
+            elif b[x][y] == ' ':
+                return False
+    return False
+
+def turn(x, y, p, mx, my):
+    
+    cb[x][y] = p
+
+    while True:
+        x = x + mx
+        y = y + my
+
+        if x < 0 or x >= 8 or y < 0 or y >= 8:
+            break
+
+        if cb[x][y] == p:
+            break 
+        else:
+            cb[x][y] = p
+ 
+
+def turn_pieces(x, y, p):
+
+    if cb[x][y] != ' ':
+        return False
+
+    turned = False
+    if check(cb, x, y, p, -1, 0):  #up
+        turn(x, y, p, -1, 0)
+        turned = True
+    if check(cb, x, y, p, 1, 0):   #down
+        turn(x, y, p, 1, 0)
+        turned = True
+    if check(cb, x, y, p, 0, -1):  #left
+        turn(x, y, p, 0, -1)
+        turned = True
+    if check(cb, x, y, p, 0, 1):   #right
+        turn(x, y, p, 0, 1)
+        turned = True
+    if check(cb, x, y, p, -1, -1): #left up
+        turn(x, y, p, -1, -1)
+        turned = True
+    if check(cb, x, y, p, 1, -1):  #left down
+        turn(x, y, p, 1, -1)
+        turned = True
+    if check(cb, x, y, p, -1, 1):  #right up
+        turn(x, y, p, -1, 1)
+        turned = True
+    if check(cb, x, y, p, 1, 1):   #right down
+        turn(x, y, p, 1, 1)
+        turned = True
+
+    return turned    
+
 def set_pieces(x, y, p):
 
     global cur_turn
 
-    if x >= 0 and x <= 7 and y >= 0 and y <= 7:
-        cb[x][y] = p
+    if turn_pieces(x, y, p):
         cur_turn ^= 1
         print_cb()
         return True
@@ -122,8 +192,9 @@ def run():
         else:
             print 'usage:'
             print '   p - print checkerboard. '
-            print '   s - put pieces on checker board. '
+            print '   s - put pieces on checkerboard. '
             print '       s <x> <y>'
+            print '   r - reset checkerboard. '
             print '   q - quit. '
 
 
