@@ -15,7 +15,7 @@ cb = [
        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
      ]
 
-
+blank = ' '
 black = '*'
 white = 'o'
 pieces = [black, white]
@@ -68,6 +68,20 @@ def print_cb():
     print ''
     print 'turn: %s' % (pieces[cur_turn])
 
+def reset():
+    for x in range(8):
+        for y in range(8):
+            cb[x][y] = blank
+
+    cb[3][3] = black
+    cb[3][4] = white
+    cb[4][3] = white
+    cb[4][4] = black
+
+    global cur_turn
+    cur_turn = 0
+
+    print_cb()
 
 def set_pieces(x, y, p):
 
@@ -84,6 +98,7 @@ def set_pieces(x, y, p):
 def run():
     
     print 'Welcome to othello!'
+    reset()
 
     while True:
         cmd = raw_input('Enter cmd: ')
@@ -92,6 +107,9 @@ def run():
 
         elif cmd == 'p':
             print_cb()
+
+        elif cmd == 'r':
+            reset()
 
         elif len(cmd) >= 5 and cmd[0] == 's':
             x = int(cmd.split(' ')[1])
